@@ -4,7 +4,6 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include <ctime>
 #include <algorithm>
 #include <../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h>
 
@@ -19,7 +18,7 @@ std::vector<int> getIdentityVector(int n) {
 std::vector<int> getRandomVector(int n) {
     std::mt19937 engine;
     std::vector<int> a(n);
-    engine.seed((unsigned)time(0));
+    engine.seed(n);
     for (int i = 0; i < n; i++) {
         a[i] = engine() % 100;
     }
