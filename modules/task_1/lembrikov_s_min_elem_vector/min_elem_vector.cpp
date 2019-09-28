@@ -1,11 +1,12 @@
 // Copyright 2019 Lembrikov Stepan
 
 #include <mpi.h>
-#include <iostream>
+#include <math.h>
 #include <vector>
-#include <ctime>
 #include <random>
+#include <ctime>
 #include <algorithm>
+#include <iostream>
 #include <../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h>
 
 std::vector<int> getIdentityVector(int n) {
@@ -18,14 +19,10 @@ std::vector<int> getIdentityVector(int n) {
 
 std::vector<int> getRandomVector(int n) {
     std::mt19937 engine;
-    engine.seed(n);
     std::vector<int> a(n);
+    engine.seed((unsigned)time(0));
     for (int i = 0; i < n; i++) {
-        if (engine() % 100 >= 0) {
-            a[i] = engine() % 100;
-        } else {
-            a[i] = 0;
-        }
+        a[i] = engine() % 100;
     }
     return a;
 }
@@ -42,29 +39,49 @@ int MinOfVector(const std::vector <int> a, int n) {
     int res = 0;
     int size;
     int rank;
-//    std::vector <int> i = getRandomVector(7);
+    int ost;
+    double buf;
+    int k;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if (rank == 0) {
-        for (int i = 0; i < n; i++) {
-            if (i % size) {
-                MPI_Send(&a[i], 1, MPI_INT, i%size, 0, MPI_COMM_WORLD);
+    ost = n % size;
+    buf = floor(n / size);
+    k = (int) buf;
+
+    if (ost == 0) {
+        if (rank == 0) {
+            for (int i = k; i <= n - k; i += k) {
+                MPI_Send(&a[i], k, MPI_INT, i / k, 0, MPI_COMM_WORLD);
+            }
+        }
+        else {
+            if (rank == 0) {
+                for (int i = k + ost; i <= n - k; i += k) {
+                    MPI_Send(&a[i], k, MPI_INT, (i - ost) / k, 0, MPI_COMM_WORLD);
+                }
             }
         }
     }
+
     MPI_Status status;
-    int b;
+    std::vector<int> b(k);
     int prom_res;
-    if (rank == 0) {
-        for (int i = 0; i < n; i += size) {
-            prom_res = std::min(a[i], prom_res);
-        }
-    } else {
-            for (int i = rank; i < n; i += size) {
-                MPI_Recv(&b, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
-                prom_res = std::min(b, prom_res);
+        if (rank == 0) {
+            prom_res = a[0];
+            for (int i = 0; i < k + ost; i++) {
+                prom_res = std::min(prom_res, a[i]);
             }
         }
+        else {
+            for (int i = 0; i < k; i++) {
+                MPI_Recv(&b[0], k, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+                prom_res = b[0];
+            }
+            for (int i = 0; i < k; i++) {
+                prom_res = std::min(prom_res, b[i]);
+            }
+        }
+
     MPI_Reduce(&prom_res, &res, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD);
     return res;
 }

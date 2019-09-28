@@ -47,7 +47,7 @@ TEST(Vector_Min_MPI, test_on_identity_vector_EQ) {
     std::vector <int> a = getIdentityVector(4);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    a[0] = 0;
+    a[3] = 0;
     int min = MinOfVector(a, 4);
     if (rank == 0) {
         EXPECT_EQ(0, min);
@@ -65,11 +65,11 @@ TEST(Vector_Min_MPI, test_on_identity_vector_NE) {
 }
 
 TEST(Vector_Min_MPI, test_on_random_vector_EQ) {
-    std::vector <int> a = getRandomVector(4);
+    std::vector <int> a = getRandomVector(10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    a[0] = 0;
-    int min = MinOfVector(a, 4);
+    a[9] = 0;
+    int min = MinOfVector(a, 10);
     if (rank == 0) {
         EXPECT_EQ(0, min);
     }
@@ -86,21 +86,21 @@ TEST(Vector_Min_MPI, test_on_random_vector_NE) {
 }
 
 TEST(Vector_Min_MPI, test_on_const_vector_EQ) {
-    std::vector <int> a = getConstVector(5, 10);
+    std::vector <int> a = getConstVector(4, 10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    a[0] = 0;
-    int min = MinOfVector(a, 5);
+    a[3] = 0;
+    int min = MinOfVector(a, 4);
     if (rank == 0) {
         EXPECT_EQ(0, min);
     }
 }
 
 TEST(Vector_Min_MPI, test_on_const_vector_NE) {
-    std::vector <int> a = getConstVector(5, 10);
+    std::vector <int> a = getConstVector(4, 10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    int min = MinOfVector(a, 5);
+    int min = MinOfVector(a, 4);
     if (rank == 0) {
         EXPECT_NE(0, min);
     }
@@ -118,5 +118,6 @@ int main(int argc, char** argv) {
     listeners.Release(listeners.default_xml_generator());
 
     listeners.Append(new GTestMPIListener::MPIMinimalistPrinter);
+
     return RUN_ALL_TESTS();
 }
