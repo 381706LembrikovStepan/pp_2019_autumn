@@ -1,12 +1,11 @@
 // Copyright 2019 Lembrikov Stepan
 
 #include <mpi.h>
-#include <math.h>
-#include <vector>
+#include <iostream>
 #include <random>
+#include <vector>
 #include <ctime>
 #include <algorithm>
-#include <iostream>
 #include <../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h>
 
 std::vector<int> getIdentityVector(int n) {
@@ -40,21 +39,18 @@ int MinOfVector(const std::vector <int> a, int n) {
     int size;
     int rank;
     int ost;
-    double buf;
     int k;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     ost = n % size;
-    buf = floor(n / size);
-    k = (int) buf;
+    k = n / size;
 
     if (ost == 0) {
         if (rank == 0) {
             for (int i = k; i <= n - k; i += k) {
                 MPI_Send(&a[i], k, MPI_INT, i / k, 0, MPI_COMM_WORLD);
             }
-        }
-        else {
+        } else {
             if (rank == 0) {
                 for (int i = k + ost; i <= n - k; i += k) {
                     MPI_Send(&a[i], k, MPI_INT, (i - ost) / k, 0, MPI_COMM_WORLD);
@@ -71,8 +67,7 @@ int MinOfVector(const std::vector <int> a, int n) {
             for (int i = 0; i < k + ost; i++) {
                 prom_res = std::min(prom_res, a[i]);
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < k; i++) {
                 MPI_Recv(&b[0], k, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
                 prom_res = b[0];
