@@ -84,5 +84,8 @@ int MinOfVector(const std::vector <int> a, int n) {
         if (rank == 0) {
             return prom_res;
         }
+        else {
+            return -1;
+        }
     }
 }
