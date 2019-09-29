@@ -1,7 +1,7 @@
 // Copyright 2019 Lembrikov Stepan
+#include <../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h>
 #include <algorithm>
 #include <vector>
-#include <../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h>
 
 std::vector<int> getIdentityVector(int n) {
     std::vector <int> a(n);
@@ -61,7 +61,7 @@ int MinOfVector(const std::vector <int> a, int n) {
     }
 
     MPI_Status status;
-    std::vector <int> b(k);
+    std::vector <int> b(k, 0);
     int prom_res;
     if (rank == 0) {
         prom_res = a[0];
