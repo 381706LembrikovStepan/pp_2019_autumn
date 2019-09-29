@@ -6,7 +6,6 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include <algorithm>
 
 std::vector<int> getRandomVector(int n);
 std::vector<int> getIdentityVector(int n);
