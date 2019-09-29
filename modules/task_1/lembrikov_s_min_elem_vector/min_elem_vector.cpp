@@ -1,10 +1,4 @@
 // Copyright 2019 Lembrikov Stepan
-
-#include <mpi.h>
-#include <iostream>
-#include <random>
-#include <vector>
-#include <algorithm>
 #include <../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h>
 
 std::vector<int> getIdentityVector(int n) {
@@ -39,9 +33,15 @@ int MinOfVector(const std::vector <int> a, int n) {
     int rank;
     int ost;
     int k;
+    int flag = 0;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     ost = n % size;
+    if (n < size) {
+        size = 1;
+        ost = 0;
+        flag = -1;
+    }
     k = n / size;
 
     if (ost == 0) {
@@ -50,11 +50,10 @@ int MinOfVector(const std::vector <int> a, int n) {
                 MPI_Send(&a[i], k, MPI_INT, i / k, 0, MPI_COMM_WORLD);
             }
         }
-        else {
-            if (rank == 0) {
-                for (int i = k + ost; i <= n - k; i += k) {
-                    MPI_Send(&a[i], k, MPI_INT, (i - ost) / k, 0, MPI_COMM_WORLD);
-                }
+    } else {
+        if (rank == 0) {
+            for (int i = k + ost; i <= n - k; i += k) {
+                MPI_Send(&a[i], k, MPI_INT, (i - ost) / k, 0, MPI_COMM_WORLD);
             }
         }
     }
@@ -67,17 +66,22 @@ int MinOfVector(const std::vector <int> a, int n) {
         for (int i = 0; i < k + ost; i++) {
             prom_res = std::min(prom_res, a[i]);
         }
-    }
-    else {
-        for (int i = 0; i < k; i++) {
+    } else {
+        if (flag == 0) {
             MPI_Recv(&b[0], k, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
             prom_res = b[0];
-        }
-        for (int i = 0; i < k; i++) {
-            prom_res = std::min(prom_res, b[i]);
+            for (int i = 0; i < k; i++) {
+                prom_res = std::min(prom_res, b[i]);
+            }
         }
     }
-
-    MPI_Reduce(&prom_res, &res, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD);
-    return res;
+    if (flag == 0) {
+        MPI_Reduce(&prom_res, &res, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD);
+        return res;
+    } else {
+        if (rank == 0)
+        {
+            return prom_res;
+        }
+    }
 }

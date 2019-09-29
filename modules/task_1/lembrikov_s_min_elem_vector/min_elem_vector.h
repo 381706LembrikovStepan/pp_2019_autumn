@@ -2,7 +2,11 @@
 #ifndef MODULES_TASK_1_LEMBRIKOV_S_MIN_ELEM_VECTOR_MIN_ELEM_VECTOR_H_
 #define MODULES_TASK_1_LEMBRIKOV_S_MIN_ELEM_VECTOR_MIN_ELEM_VECTOR_H_
 
+#include <mpi.h>
+#include <iostream>
+#include <random>
 #include <vector>
+#include <algorithm>
 
 std::vector<int> getRandomVector(int n);
 std::vector<int> getIdentityVector(int n);

@@ -1,18 +1,13 @@
 // Copyright 2019 Lembrikov Stepan
-
 #include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
 #include <vector>
-#include "../../../modules/task_1/lembrikov_s_min_elem_vector/min_elem_vector.h"
+#include "./min_elem_vector.h"
 
 TEST(Vector_Min_MPI, Test_On_Vector_EQ) {
-    std::vector <int> a(10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    a[0] = 2;
-    a[1] = 1;
-    a[2] = 3;
-    a[3] = 0;
+    std::vector <int> a(10);
     a[0] = 9;
     a[1] = 8;
     a[2] = 7;
@@ -43,7 +38,7 @@ TEST(Vector_Min_MPI, Test_On_Vector_NE) {
     }
 }
 
-TEST(Vector_Min_MPI, test_on_identity_vector_EQ) {
+TEST(Vector_Min_MPI, Test_On_Identity_Vector_EQ) {
     std::vector <int> a = getIdentityVector(4);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -54,7 +49,7 @@ TEST(Vector_Min_MPI, test_on_identity_vector_EQ) {
     }
 }
 
-TEST(Vector_Min_MPI, test_on_identity_vector_NE) {
+TEST(Vector_Min_MPI, Test_On_Identity_Vector_NE) {
     std::vector <int> a = getIdentityVector(10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -64,7 +59,7 @@ TEST(Vector_Min_MPI, test_on_identity_vector_NE) {
     }
 }
 
-TEST(Vector_Min_MPI, test_on_random_vector_EQ) {
+TEST(Vector_Min_MPI, Test_On_Random_Vector_EQ) {
     std::vector <int> a = getRandomVector(10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -75,7 +70,7 @@ TEST(Vector_Min_MPI, test_on_random_vector_EQ) {
     }
 }
 
-TEST(Vector_Min_MPI, test_on_random_vector_NE) {
+TEST(Vector_Min_MPI, Test_On_Random_Vector_NE) {
     std::vector <int> a = getRandomVector(10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -85,7 +80,7 @@ TEST(Vector_Min_MPI, test_on_random_vector_NE) {
     }
 }
 
-TEST(Vector_Min_MPI, test_on_const_vector_EQ) {
+TEST(Vector_Min_MPI, Test_On_Const_Vector_EQ) {
     std::vector <int> a = getConstVector(4, 10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -96,7 +91,7 @@ TEST(Vector_Min_MPI, test_on_const_vector_EQ) {
     }
 }
 
-TEST(Vector_Min_MPI, test_on_const_vector_NE) {
+TEST(Vector_Min_MPI, Test_On_Const_Vector_NE) {
     std::vector <int> a = getConstVector(4, 10);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
