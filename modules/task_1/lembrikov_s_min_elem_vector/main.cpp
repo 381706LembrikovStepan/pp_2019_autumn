@@ -101,6 +101,27 @@ TEST(Vector_Min_MPI, Test_On_Const_Vector_NE) {
     }
 }
 
+TEST(Vector_Min_MPI, Test_On_Negative_Vector_EQ) {
+    std::vector <int> a = getNegativeVector(4);
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    a[3] = -2;
+    int min = MinOfVector(a, 4);
+    if (rank == 0) {
+        EXPECT_EQ(-2, min);
+    }
+}
+
+TEST(Vector_Min_MPI, Test_On_Negative_Vector_NE) {
+    std::vector <int> a = getNegativeVector(10);
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    int min = MinOfVector(a, 10);
+    if (rank == 0) {
+        EXPECT_NE(0, min);
+    }
+}
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     MPI_Init(&argc, &argv);

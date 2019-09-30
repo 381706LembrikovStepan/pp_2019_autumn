@@ -29,6 +29,14 @@ std::vector<int> getConstVector(int n, int c) {
     return a;
 }
 
+std::vector<int> getNegativeVector(int n) {
+    std::vector <int> a(n);
+    for (int i = 0; i < n; i++) {
+        a[i] = -1;
+    }
+    return a;
+}
+
 int MinOfVector(const std::vector <int> a, int n) {
     int res = 0;
     int size;
