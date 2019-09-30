@@ -105,7 +105,7 @@ TEST(Vector_Min_MPI, Test_On_Negative_Vector_EQ) {
     std::vector <int> a = getNegativeVector(4);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    a[3] = -2;
+    a[2] = -2;
     int min = MinOfVector(a, 4);
     if (rank == 0) {
         EXPECT_EQ(-2, min);
