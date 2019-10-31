@@ -41,7 +41,7 @@ std::vector <int> MatrixOnVector(const std::vector <int> &matr, int cols,
     int flag = 0;
     int per = vect.size();
     if ((per != cols) || (cols < 0) || (rows < 0))
-        throw "Wrong size of matrix a or vector b";
+        throw "wrong size of matrix a or vector b";
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     ost = rows % size;
