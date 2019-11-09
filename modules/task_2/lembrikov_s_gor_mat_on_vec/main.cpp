@@ -23,9 +23,12 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_EQ) {
     a[6] = -1;
     a[7] = 0;
     a[8] = 1;
+    //double start = MPI_Wtime();
     res_vector = MatrixOnVector(a, 3, 3, b);
+    //double end = MPI_Wtime();
     if (rank == 0) {
         EXPECT_EQ(res_vector, res);
+        //std::cout << end - start;
     }
 }
 
@@ -81,35 +84,42 @@ TEST(Mat_On_Vec_MPI, Test_On_Identity_Vector_NE) {
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_EQ) {
-    std::vector <int> a = getRandomVector(120);
-    std::vector <int> b = getRandomVector(3);
-    std::vector <int> res_vector_multy(40, 0);
+    int razmer = 12;
+    int cols = 3;
+    int rows = 4;
+    std::vector <int> a = getRandomVector(razmer);
+    std::vector <int> b = getRandomVector(cols);
+    std::vector <int> res_vector_multy(rows, 0);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    res_vector_multy = MatrixOnVector(a, 3, 40, b);
     if (rank == 0) {
-        std::vector <int> res_vector_root(40, 0);
-        for (int i = 0; i < 120; i += 3) {
-            for (int j = 0; j < 3; j++)
-                res_vector_root[i / 3] += a[i + j] * b[j];
+        res_vector_multy = MatrixOnVector(a, cols, rows, b);
+        std::vector <int> res_vector_root(rows, 0);
+        for (int i = 0; i < razmer; i += cols) {
+            for (int j = 0; j < cols; j++) {
+                res_vector_root[i / cols] += a[i + j] * b[j];
+            }
         }
         EXPECT_EQ(res_vector_multy, res_vector_root);
     }
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_NE) {
-    std::vector <int> a = getRandomVector(120);
-    std::vector <int> b = getRandomVector(3);
-    std::vector <int> res_vector_multy(40, 0);
+    int razmer = 12;
+    int cols = 3;
+    int rows = 4;
+    std::vector <int> a = getRandomVector(razmer);
+    std::vector <int> b = getRandomVector(cols);
+    std::vector <int> res_vector_multy(rows, 0);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    res_vector_multy = MatrixOnVector(a, 3, 40, b);
+    res_vector_multy = MatrixOnVector(a, cols, rows, b);
     res_vector_multy[0] += 1;
     if (rank == 0) {
         std::vector <int> res_vector_root(40, 0);
-        for (int i = 0; i < 120; i += 3) {
-            for (int j = 0; j < 3; j++)
-                res_vector_root[i / 3] += a[i + j] * b[j];
+        for (int i = 0; i < razmer; i += cols) {
+            for (int j = 0; j < cols; j++)
+                res_vector_root[i / cols] += a[i + j] * b[j];
         }
         EXPECT_NE(res_vector_multy, res_vector_root);
     }
