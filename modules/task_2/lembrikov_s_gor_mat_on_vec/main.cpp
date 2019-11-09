@@ -23,9 +23,12 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_EQ) {
     a[6] = -1;
     a[7] = 0;
     a[8] = 1;
+    //double start = MPI_Wtime();
     res_vector = MatrixOnVector(a, 3, 3, b);
+    //double end = MPI_Wtime();
     if (rank == 0) {
         EXPECT_EQ(res_vector, res);
+        //std::cout << end - start;
     }
 }
 
