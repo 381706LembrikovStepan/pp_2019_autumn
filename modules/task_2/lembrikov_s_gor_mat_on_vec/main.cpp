@@ -89,8 +89,8 @@ TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_EQ) {
     std::vector <int> res_vector_multy(rows, 0);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    res_vector_multy = MatrixOnVector(a, cols, rows, b);
     if (rank == 0) {
-        res_vector_multy = MatrixOnVector(a, cols, rows, b);
         std::vector <int> res_vector_root(rows, 0);
         for (int i = 0; i < razmer; i += cols) {
             for (int j = 0; j < cols; j++) {
@@ -113,7 +113,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_NE) {
     res_vector_multy = MatrixOnVector(a, cols, rows, b);
     res_vector_multy[0] += 1;
     if (rank == 0) {
-        std::vector <int> res_vector_root(40, 0);
+        std::vector <int> res_vector_root(rows, 0);
         for (int i = 0; i < razmer; i += cols) {
             for (int j = 0; j < cols; j++)
                 res_vector_root[i / cols] += a[i + j] * b[j];
