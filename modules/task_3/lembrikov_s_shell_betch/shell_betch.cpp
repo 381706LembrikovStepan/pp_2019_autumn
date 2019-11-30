@@ -180,6 +180,12 @@ std::vector <int> Shell(std::vector <int> mas) {
     } else if ((size % 2 == 1) && (size == 1)) {
         flag = 1;
     }
+
+    if (size == 1) {
+        mas = ShellSort(mas, mas.size());
+    }
+
+    if (size > 1) {
     ostatok = size_mas % size;
     k = size_mas / size;
     std::vector <int> part_mas(k + ostatok, 0);
@@ -231,7 +237,6 @@ std::vector <int> Shell(std::vector <int> mas) {
             count_iter++;
         }
     }
-    if (size > 1) {
         while (iter < count_iter) {
         if ((k % 2) == 1)
             ost = 1;
