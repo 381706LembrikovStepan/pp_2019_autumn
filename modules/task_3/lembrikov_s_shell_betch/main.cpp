@@ -8,7 +8,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_EQ) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector <int> a(8);
-    std::vector <int> res = {2, 3, 4 ,5 ,6 ,7 ,8 ,9};
+    std::vector <int> res = {2, 3, 4 , 5 , 6 , 7 , 8 , 9};
     std::vector <int> res_vector(9, 0);
     a[0] = 9;
     a[1] = 8;
@@ -28,7 +28,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_NE) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector <int> a(8);
-    std::vector <int> res = {2, 3, 4 ,5 ,6 ,7 ,9 ,8};
+    std::vector <int> res = {2, 3, 4 , 5 , 6 , 7 , 9 , 8};
     std::vector <int> res_vector(9, 0);
     a[0] = 9;
     a[1] = 8;
