@@ -83,9 +83,9 @@ TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_EQ) {
     res = a;
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    double start_multy = MPI_Wtime();
+    //double start_multy = MPI_Wtime();
     res_vector_multy = Shell(a);
-    double end_multy = MPI_Wtime();
+    //double end_multy = MPI_Wtime();
 
     if (rank == 0) {
         // double start_solo = MPI_Wtime();

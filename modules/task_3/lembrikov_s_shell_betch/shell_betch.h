@@ -10,6 +10,6 @@
 std::vector<int> getRandomVector(int n);
 std::vector<int> getOtrVector(int n);
 std::vector<int> ShellSort(const std::vector <int> &mas, int size);
-std::vector<int> Shell(std::vector <int> &mas);
+std::vector<int> Shell(std::vector <int> mas);
 
-#endif  // MODULES_TASK_3_LEMBRIKOV_S_GOR_MAT_ON_VEC_GOR_MAT_ON_VEC_H_
+#endif  // MODULES_TASK_3_LEMBRIKOV_S_SHELL_BETCH_SHELL_BETCH_H_

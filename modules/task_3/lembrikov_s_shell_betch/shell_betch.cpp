@@ -78,8 +78,7 @@ std::vector <int> Nechet_Betch(const std::vector <int> &mas_1,
         if (mas_1[it1] <= mas_2[it2]) {
             mas_res[i] = mas_1[it1];
             it1 += 2;
-        }
-        else {
+        } else {
             mas_res[i] = mas_2[it2];
             it2 += 2;
         }
@@ -91,8 +90,7 @@ std::vector <int> Nechet_Betch(const std::vector <int> &mas_1,
             mas_res[i] = mas_2[j];
             i++;
         }
-    }
-    else {
+    } else {
         for (int j = it1; j < size1; j += 2) {
             mas_res[i] = mas_1[j];
             i++;
@@ -150,17 +148,12 @@ std::vector <int> Sravnenie_Chet_Nechet(const std::vector <int> &mas_res_1,
     return mas_res;
 }
 
-std::vector <int> ShellSort(const std::vector <int> &mas, int size)
-{
+std::vector <int> ShellSort(const std::vector <int> &mas, int size) {
     int step, i, j, tmp;
     std::vector <int> mas_res(mas);
-    // Выбор шага
     for (step = size / 2; step > 0; step /= 2)
-        // Перечисление элементов, которые сортируются на определённом шаге
         for (i = step; i < size; i++)
-            // Перестановка элементов внутри подсписка, пока i-тый не будет отсортирован
-            for (j = i - step; j >= 0 && mas_res[j] > mas_res[j + step]; j -= step)
-            {
+            for (j = i - step; j >= 0 && mas_res[j] > mas_res[j + step]; j -= step) {
                 tmp = mas_res[j];
                 mas_res[j] = mas_res[j + step];
                 mas_res[j + step] = tmp;
@@ -169,11 +162,11 @@ std::vector <int> ShellSort(const std::vector <int> &mas, int size)
 }
 
 
-std::vector <int> Shell(std::vector <int> &mas) {
+std::vector <int> Shell(std::vector <int> mas) {
     int size;
     int rank;
     int ost;
-    int k;
+    // int k;
     int flag = 0;
     int flag123 = 0;
     int ost123 = 0;
@@ -185,11 +178,10 @@ std::vector <int> Shell(std::vector <int> &mas) {
     int it_proizved = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if ((size % 2 == 1) && (size > 1)) { // если нечётное количество процессов
+    if ((size % 2 == 1) && (size > 1)) {
         flag = -1;
         size = size - 1;
-    }
-    else if ((size % 2 == 1) && (size == 1)) {
+    } else if ((size % 2 == 1) && (size == 1)) {
         flag = 1;
     }
     ost123 = size_mas % size;
@@ -237,7 +229,7 @@ std::vector <int> Shell(std::vector <int> &mas) {
     int iter = 0;
     int count_iter = 0;
     int buf = size;
-    while (buf != 1) { // считаем, сколько надо итераций для сортировки всего массива
+    while (buf != 1) {
         if (buf % 2 == 0) {
             buf = buf / 2;
             count_iter++;
@@ -315,7 +307,8 @@ std::vector <int> Shell(std::vector <int> &mas) {
                 if (rank == 0) {
                     MPI_Status status1;
                     if (size > 1) {
-                        MPI_Recv(&mas[smesh], res_part_mas.size(), MPI_INT, it_par * 2 + 1, 1, MPI_COMM_WORLD, &status1);
+                        MPI_Recv(&mas[smesh], res_part_mas.size(),
+                            MPI_INT, it_par * 2 + 1, 1, MPI_COMM_WORLD, &status1);
                     }
                 }
                 MPI_Bcast(&mas[smesh], res_part_mas.size(), MPI_INT, 0, MPI_COMM_WORLD);
@@ -323,7 +316,8 @@ std::vector <int> Shell(std::vector <int> &mas) {
                 if (rank == size) {
                     MPI_Status status1;
                     if (size > 1) {
-                        MPI_Recv(&mas[smesh], res_part_mas.size(), MPI_INT, it_par * 2 + 1, 1, MPI_COMM_WORLD, &status1);
+                        MPI_Recv(&mas[smesh], res_part_mas.size(),
+                            MPI_INT, it_par * 2 + 1, 1, MPI_COMM_WORLD, &status1);
                     }
                 }
                 MPI_Bcast(&mas[smesh], res_part_mas.size(), MPI_INT, size, MPI_COMM_WORLD);
