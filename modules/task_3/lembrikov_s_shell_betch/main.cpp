@@ -8,7 +8,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_EQ) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector <int> a(8);
-    std::vector <int> res = { 2, 3, 4 ,5 ,6 ,7 ,8 ,9 };
+    std::vector <int> res = {2, 3, 4 ,5 ,6 ,7 ,8 ,9};
     std::vector <int> res_vector(9, 0);
     a[0] = 9;
     a[1] = 8;
@@ -28,7 +28,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_NE) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector <int> a(8);
-    std::vector <int> res = { 2, 3, 4 ,5 ,6 ,7 ,9 ,8 };
+    std::vector <int> res = {2, 3, 4 ,5 ,6 ,7 ,9 ,8};
     std::vector <int> res_vector(9, 0);
     a[0] = 9;
     a[1] = 8;
@@ -47,7 +47,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_NE) {
 TEST(Mat_On_Vec_MPI, Test_On_Otr_Vector_EQ) {
     int razmer = 17;
     std::vector <int> a = getOtrVector(razmer);
-    std::vector <int> res (razmer);
+    std::vector <int> res(razmer);
     std::vector <int> res_vector(razmer);
     res = a;
     int rank;
@@ -83,9 +83,9 @@ TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_EQ) {
     res = a;
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    //double start_multy = MPI_Wtime();
+    // double start_multy = MPI_Wtime();
     res_vector_multy = Shell(a);
-    //double end_multy = MPI_Wtime();
+    // double end_multy = MPI_Wtime();
 
     if (rank == 0) {
         // double start_solo = MPI_Wtime();
