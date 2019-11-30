@@ -166,14 +166,12 @@ std::vector <int> Shell(std::vector <int> mas) {
     int size;
     int rank;
     int ost;
-    // int k;
     int flag = 0;
     int ostatok = 0;
     int k = 0;
     int size_mas = mas.size();
     if (size_mas == 1)
         return mas;
-    int it_proizved = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if ((size % 2 == 1) && (size > 1)) {
