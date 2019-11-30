@@ -168,13 +168,11 @@ std::vector <int> Shell(std::vector <int> mas) {
     int ost;
     // int k;
     int flag = 0;
-    int flag123 = 0;
-    int ost123 = 0;
-    int k123 = 0;
+    int ostatok = 0;
+    int k = 0;
     int size_mas = mas.size();
     if (size_mas == 1)
         return mas;
-    int it_step = size_mas;
     int it_proizved = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -184,47 +182,44 @@ std::vector <int> Shell(std::vector <int> mas) {
     } else if ((size % 2 == 1) && (size == 1)) {
         flag = 1;
     }
-    ost123 = size_mas % size;
-    k123 = size_mas / size;
-    std::vector <int> part_mas(k123 + ost123, 0);
+    ostatok = size_mas % size;
+    k = size_mas / size;
+    std::vector <int> part_mas(k + ostatok, 0);
     MPI_Status status;
 
     for (int i = 0; i < size - 2; i += 2) {
         if (rank == i) {
-            part_mas = ShellSort({ mas.cbegin() + i * k123, mas.cbegin() + (i + 1) * k123 }, k123);
-            std::copy(part_mas.begin(), part_mas.begin() + k123, mas.begin() + i * k123);
+            part_mas = ShellSort({ mas.cbegin() + i * k, mas.cbegin() + (i + 1) * k }, k);
+            std::copy(part_mas.begin(), part_mas.begin() + k, mas.begin() + i * k);
             if (i < size - 1) {
-                MPI_Sendrecv(&part_mas[0], k123, MPI_INT, i + 1, 0,
-                    &mas[(i + 1) * k123], k123, MPI_INT, i + 1, 0, MPI_COMM_WORLD, &status);
+                MPI_Sendrecv(&part_mas[0], k, MPI_INT, i + 1, 0,
+                    &mas[(i + 1) * k], k, MPI_INT, i + 1, 0, MPI_COMM_WORLD, &status);
             }
         }
     }
     for (int i = 1; i < size - 1; i += 2) {
         if (rank == i) {
-            part_mas = ShellSort({ mas.cbegin() + i * k123, mas.cbegin() + (i + 1) * k123 }, k123);
-            std::copy(part_mas.begin(), part_mas.begin() + k123, mas.begin() + k123 * i);
-            MPI_Sendrecv(&part_mas[0], k123, MPI_INT, i - 1, 0,
-                &mas[(i - 1) * k123], k123, MPI_INT, i - 1, 0, MPI_COMM_WORLD, &status);
+            part_mas = ShellSort({ mas.cbegin() + i * k, mas.cbegin() + (i + 1) * k }, k);
+            std::copy(part_mas.begin(), part_mas.begin() + k, mas.begin() + k * i);
+            MPI_Sendrecv(&part_mas[0], k, MPI_INT, i - 1, 0,
+                &mas[(i - 1) * k], k, MPI_INT, i - 1, 0, MPI_COMM_WORLD, &status);
         }
     }
 
     if (rank == size - 2) {
-        part_mas = ShellSort({ mas.cend() - 2 * k123 - ost123, mas.cend() - k123 - ost123}, k123);
-        std::copy(part_mas.begin(), part_mas.begin() + k123, mas.end() - 2 * k123 - ost123);
-        MPI_Sendrecv(&part_mas[0], k123, MPI_INT, size - 1, 0,
-            &mas[(size - 1) * k123], k123 + ost123, MPI_INT, size - 1, 0, MPI_COMM_WORLD, &status);
+        part_mas = ShellSort({ mas.cend() - 2 * k - ostatok, mas.cend() - k - ostatok}, k);
+        std::copy(part_mas.begin(), part_mas.begin() + k, mas.end() - 2 * k - ostatok);
+        MPI_Sendrecv(&part_mas[0], k, MPI_INT, size - 1, 0,
+            &mas[(size - 1) * k], k + ostatok, MPI_INT, size - 1, 0, MPI_COMM_WORLD, &status);
     }
 
     if (rank == size - 1) {
-        part_mas = ShellSort({ mas.cend() - k123 - ost123, mas.cend() }, k123 + ost123);
-        std::copy(part_mas.begin(), part_mas.begin() + k123 + ost123, mas.end() - k123 - ost123);
-        MPI_Sendrecv(&part_mas[0], k123 + ost123, MPI_INT, size - 2, 0,
-            &mas[(size - 2) * k123], k123, MPI_INT, size - 2, 0, MPI_COMM_WORLD, &status);
+        part_mas = ShellSort({ mas.cend() - k - ostatok, mas.cend() }, k + ostatok);
+        std::copy(part_mas.begin(), part_mas.begin() + k + ostatok, mas.end() - k - ostatok);
+        MPI_Sendrecv(&part_mas[0], k + ostatok, MPI_INT, size - 2, 0,
+            &mas[(size - 2) * k], k, MPI_INT, size - 2, 0, MPI_COMM_WORLD, &status);
     }
 
-    double st = 0;
-    double end = 0;
-    double sum = 0;
     int flag_nechet_proc = 0;
     int iter = 0;
     int count_iter = 0;
@@ -238,46 +233,45 @@ std::vector <int> Shell(std::vector <int> mas) {
             count_iter++;
         }
     }
-    int count = 0;
     if (size > 1) {
         while (iter < count_iter) {
-        if ((k123 % 2) == 1)
+        if ((k % 2) == 1)
             ost = 1;
         else
             ost = 0;
-        std::vector <int> res_part_mas1(k123 + ost);
-        std::vector <int> res_part_mas2(k123 - ost);
-        std::vector <int> res_part_mas(2 * k123);
+        std::vector <int> res_part_mas1(k + ost);
+        std::vector <int> res_part_mas2(k - ost);
+        std::vector <int> res_part_mas(2 * k);
         int it_par = 0;
         int smesh = 0;
         int dobavka = 0;
-        int it = (size_mas - ost123) / k123 / 2;
+        int it = (size_mas - ostatok) / k / 2;
         if (flag_nechet_proc == 1) {
             it++;
         }
 
         for (int i = 0; i < it; i++) {
-            smesh = it_par * 2 * k123;
+            smesh = it_par * 2 * k;
 
             if (i == (it - 1)) {
                 if (flag_nechet_proc == 1) {
-                    ost = (k123 / 2) % 2;
-                    res_part_mas1.resize(k123 / 2 + k123 / 4 + ost + ost123 / 2 + ost123 % 2);
-                    res_part_mas2.resize(k123 / 2 + k123 / 4 + ost123 / 2);
-                    res_part_mas.resize(k123 + k123 / 2 + ost123);
-                    dobavka = k123 / 2 - k123 + ost123;
+                    ost = (k / 2) % 2;
+                    res_part_mas1.resize(k / 2 + k / 4 + ost + ostatok / 2 + ostatok % 2);
+                    res_part_mas2.resize(k / 2 + k / 4 + ostatok / 2);
+                    res_part_mas.resize(k + k / 2 + ostatok);
+                    dobavka = k / 2 - k + ostatok;
                 }
-                if ((flag_nechet_proc == 0) && ((size_mas - ost123) == (k123 * 2 * it))) {
+                if ((flag_nechet_proc == 0) && ((size_mas - ostatok) == (k * 2 * it))) {
                     if (ost == 0) {
-                        res_part_mas1.resize(k123 + ost123 / 2 + ost123 % 2);
-                        res_part_mas2.resize(k123 + ost123 / 2);
+                        res_part_mas1.resize(k + ostatok / 2 + ostatok % 2);
+                        res_part_mas2.resize(k + ostatok / 2);
                     }
                     if (ost == 1) {
-                        res_part_mas1.resize(k123 + ost + ost123 / 2);
-                        res_part_mas2.resize(k123 - ost + ost123 / 2 + ost123 % 2);
+                        res_part_mas1.resize(k + ost + ostatok / 2);
+                        res_part_mas2.resize(k - ost + ostatok / 2 + ostatok % 2);
                     }
-                    res_part_mas.resize(2 * k123 + ost123);
-                    dobavka = ost123;
+                    res_part_mas.resize(2 * k + ostatok);
+                    dobavka = ostatok;
                 }
             }
             if (flag_nechet_proc == 1) {
@@ -286,15 +280,15 @@ std::vector <int> Shell(std::vector <int> mas) {
 
             if (rank == it_par * 2) {
                 res_part_mas1 = Chet_Betch({ mas.cbegin() + smesh,
-    mas.cbegin() + smesh + k123 },
-                    { mas.cbegin() + smesh + k123, mas.cbegin() + smesh + 2 * k123  + dobavka });
+    mas.cbegin() + smesh + k },
+                    { mas.cbegin() + smesh + k, mas.cbegin() + smesh + 2 * k  + dobavka });
                 MPI_Send(&res_part_mas1[0], res_part_mas1.size(), MPI_INT, it_par * 2 + 1, 0, MPI_COMM_WORLD);
             }
             if (rank == it_par * 2 + 1) {
                 MPI_Status status0;
                 res_part_mas2 = Nechet_Betch({ mas.cbegin() + smesh,
-    mas.cbegin() + smesh + k123 },
-                    { mas.cbegin() + smesh + k123, mas.cbegin() + smesh + 2 * k123 + dobavka });
+    mas.cbegin() + smesh + k },
+                    { mas.cbegin() + smesh + k, mas.cbegin() + smesh + 2 * k + dobavka });
                 MPI_Recv(&res_part_mas1[0], res_part_mas1.size(), MPI_INT, it_par * 2, 0, MPI_COMM_WORLD, &status0);
                 res_part_mas = Sravnenie_Chet_Nechet(res_part_mas1, res_part_mas2);
                 if (flag == 0) {
@@ -324,10 +318,10 @@ std::vector <int> Shell(std::vector <int> mas) {
             }
             it_par++;
         }
-        if ((((size_mas - ost123) / k123) % 2) != 0) {
+        if ((((size_mas - ostatok) / k) % 2) != 0) {
             flag_nechet_proc = 1;
         }
-        k123 = k123 * 2;
+        k = k * 2;
         iter++;
     }
     }
