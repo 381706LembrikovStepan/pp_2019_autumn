@@ -8,7 +8,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_EQ) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector <int> a(8);
-    std::vector <int> res = {2, 3, 4 , 5 , 6 , 7 , 8 , 9};
+    std::vector <int> res = {2, 3, 4, 5, 6, 7, 8, 9};
     std::vector <int> res_vector(8, 0);
     a[0] = 9;
     a[1] = 8;
@@ -28,7 +28,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_NE) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::vector <int> a(8);
-    std::vector <int> res = {2, 3, 4 , 5 , 6 , 7 , 9 , 8};
+    std::vector <int> res = {2, 3, 4, 5, 6, 7, 9, 8};
     std::vector <int> res_vector(8, 0);
     a[0] = 9;
     a[1] = 8;
@@ -45,7 +45,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_NE) {
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Otr_Vector_EQ) {
-    int razmer = 20;
+    int razmer = 16;
     std::vector <int> a = getOtrVector(razmer);
     std::vector <int> res(razmer);
     std::vector <int> res_vector(razmer);
@@ -60,7 +60,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Otr_Vector_EQ) {
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Otr_Vector_NE) {
-    int razmer = 21;
+    int razmer = 16;
     std::vector <int> a = getOtrVector(razmer);
     std::vector <int> res(razmer);
     std::vector <int> res_vector(razmer);
@@ -70,13 +70,13 @@ TEST(Mat_On_Vec_MPI, Test_On_Otr_Vector_NE) {
     res_vector = Shell(a);
     if (rank == 0) {
         res = ShellSort(res, razmer);
-        res[razmer - 1] = 2;
+        res[razmer - 1] = -1;
         EXPECT_NE(res_vector, res);
     }
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_EQ) {
-    int razmer = 31;
+    int razmer = 36;
     std::vector <int> a = getRandomVector(razmer);
     std::vector <int> res_vector_multy(razmer, 0);
     std::vector <int> res(razmer, 0);
@@ -98,7 +98,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_EQ) {
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Random_Vector_NE) {
-    int razmer = 89;
+    int razmer = 36;
     std::vector <int> a = getRandomVector(razmer);
     std::vector <int> res_vector_multy(razmer, 0);
     std::vector <int> res(razmer, 0);
