@@ -45,7 +45,7 @@ TEST(Mat_On_Vec_MPI, Test_On_Vector_NE) {
 }
 
 TEST(Mat_On_Vec_MPI, Test_On_Otr_Vector_EQ) {
-    int razmer = 17;
+    int razmer = 20;
     std::vector <int> a = getOtrVector(razmer);
     std::vector <int> res(razmer);
     std::vector <int> res_vector(razmer);
