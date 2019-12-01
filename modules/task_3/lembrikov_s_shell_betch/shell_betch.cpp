@@ -166,14 +166,11 @@ std::vector <int> Shell(std::vector <int> mas) {
     int rank;
     int ost;
     int flag = 0;
-    int flag123 = 0;
     int ostatok = 0;
     int k = 0;
     int size_mas = mas.size();
     if (size_mas == 1)
         return mas;
-    int it_step = size_mas;
-    int it_proizved = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if ((size % 2 == 1) && (size > 1)) {
@@ -251,15 +248,8 @@ std::vector <int> Shell(std::vector <int> mas) {
         MPI_Bcast(&mas[k * (size - 1)], k + ostatok, MPI_INT, size - 1, MPI_COMM_WORLD);
     }
 
-    double st = 0;
-    double end = 0;
-    double sum = 0;
-    int flag_nechet_proc = 0;
     int iter = 0;
     int count_iter = 0;
-    int buf = size;
-    int size_prin_uc = 0;
-    int count_ost_mas = size;
 
     int kolvo_bit = sizeof(int) * 8;
     std::vector <int> bit(kolvo_bit);
