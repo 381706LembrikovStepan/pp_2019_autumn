@@ -178,8 +178,7 @@ std::vector <int> Shell(std::vector <int> mas) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if ((size % 2 == 1) && (size > 1)) {
         flag = -1;
-    }
-    else if ((size > size_mas) || (size == 1)) {
+    } else if ((size > size_mas) || (size == 1)) {
         flag = 1;
     }
     ostatok = size_mas % size;
@@ -225,8 +224,7 @@ std::vector <int> Shell(std::vector <int> mas) {
             MPI_Sendrecv(&part_mas[0], k + ostatok, MPI_INT, size - 2, 0,
                 &mas[(size - 2) * k], k, MPI_INT, size - 2, 0, MPI_COMM_WORLD, &status);
         }
-    }
-    else if (flag == -1) {
+    } else if (flag == -1) {
         for (int i = 0; i < size - 1; i += 2) {
             if (rank == i) {
                 part_mas = ShellSort({ mas.cbegin() + i * k, mas.cbegin() + (i + 1) * k }, k);
@@ -267,7 +265,7 @@ std::vector <int> Shell(std::vector <int> mas) {
     std::vector <int> bit(kolvo_bit);
     int it_bit = 0;
     for (int i = kolvo_bit - 1; i >= 0; i--) {
-        if ((bool((1 << i)  &  size)) == 1) {
+        if ((static_cast<bool>((1 << i)  &  size)) == 1) {
             bit[it_bit] = pow(2, i);
             it_bit++;
         }
