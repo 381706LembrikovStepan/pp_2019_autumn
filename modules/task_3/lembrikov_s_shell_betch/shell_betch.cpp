@@ -333,7 +333,8 @@ std::vector <int> Shell(std::vector <int> mas) {
                         res_part_mas2 = Nechet_Betch({ mas.cbegin() + smesh,
             mas.cbegin() + smesh + k },
                             { mas.cbegin() + smesh + k, mas.cbegin() + smesh + 2 * k + dobavka });
-                        MPI_Recv(&res_part_mas1[0], res_part_mas1.size(), MPI_INT, it_par * 2, 0, MPI_COMM_WORLD, &status0);
+                        MPI_Recv(&res_part_mas1[0], res_part_mas1.size(), MPI_INT,
+                            it_par * 2, 0, MPI_COMM_WORLD, &status0);
                         res_part_mas = Sravnenie_Chet_Nechet(res_part_mas1, res_part_mas2);
                         MPI_Send(&res_part_mas[0], res_part_mas.size(), MPI_INT, 0, 1, MPI_COMM_WORLD);
                     }
