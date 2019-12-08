@@ -175,8 +175,7 @@ std::vector <int> Shell(std::vector <int> mas) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if ((size % 2 == 1) && (size > 1)) {
         flag = -1;
-    }
-    else if ((size > size_mas) || (size == 1)) {
+    } else if ((size > size_mas) || (size == 1)) {
         flag = 1;
     }
     ostatok = size_mas % size;
